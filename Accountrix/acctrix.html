@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Accountrix</title>
+
+<!-- Add a readable, modern font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    font-size: 18px; /* base font size (increase/decrease to scale all text) */
+    --accent-yellow: #ffd54f;
+    --accent-yellow-2: #ffca28;
+    --text: #222;
+    --card-bg: #ffffff;
+    --soft-bg: #fffbea;
+  }
+
+  /* Page */
+  body {
+    font-family: "Poppins", "Segoe UI", Tahoma, sans-serif;
+    font-weight: 400;
+    color: var(--text);
+    background: linear-gradient(180deg, var(--soft-bg) 0%, #fffde7 100%);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Header / hero */
+  header {
+    background-color: var(--accent-yellow);
+    color: #222;
+    text-align: center;
+    padding: 26px 16px;
+  }
+  header img {
+    max-height: 120px;
+    height: auto;
+    vertical-align: middle;
+    display: block;
+    margin: 0 auto 8px;
+  }
+  header h1 {
+    margin: 6px 0 4px;
+    font-weight: 700;
+    font-size: 2.2rem; /* larger title */
+    letter-spacing: -0.02em;
+  }
+  header p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.95;
+  }
+
+  section {
+    padding: 32px 16px;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  p { font-size: 1.05rem; }
+
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    margin: 10px;
+    padding: 14px 26px;
+    background-color: var(--accent-yellow-2);
+    color: #222;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.05rem;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .btn:hover { background-color: #ffb300; }
+
+  /* Question / card */
+  .question-box {
+    background: var(--card-bg);
+    border-radius: 14px;
+    width: 70%;
+    max-width: 920px;
+    min-width: 320px;
+    margin: 18px auto;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    text-align: center;
+    font-size: 1.05rem;
+  }
+
+  input[type=text], input[type=number] {
+    width: 80%;
+    max-width: 520px;
+    padding: 12px 14px;
+    margin-top: 12px;
+    border: 1px solid #e6e0c8;
+    border-radius: 8px;
+    background: #fffef8;
+    font-size: 1rem;
+  }
+
+  #feedback { font-weight: 700; margin-top: 12px; font-size: 1.05rem; }
+  .correct { color: green; }
+  .incorrect { color: red; }
+  .hidden { display: none; }
+
+  .timer {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #d32f2f;
+  margin: 10px 0;
+}
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    :root{ font-size: 16px; }
+    .question-box { width: 92%; padding: 18px; }
+    .btn { padding: 12px 18px; font-size: 1rem; }
+    header h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.3rem; }
+  }
+
+  /* Welcome section */
+  #welcome {
+    background-color: var(--accent-yellow);
+    color: #222;
+    text-align: center;
+    padding: 40px 16px;
+  }
+  #welcome .welcome-logo {
+    max-height: 100px;
+    height: auto;
+    margin-bottom: 16px;
+  }
+  #welcome h1 {
+    margin: 8px 0 4px;
+    font-weight: 700;
+    font-size: 2.4rem;
+  }
+  #welcome p {
+    margin: 0 0 16px;
+    font-size: 1.1rem;
+    opacity: 0.95;
+  }
+  #welcome .intro-message {
+    font-size: 1.05rem;
+    margin: 0 0 24px;
+    text-align: left;
+  }
+  #welcome .start-btn {
+    margin-top: 12px;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+  }
+
+  /* Homepage (game selection) */
+  #homepage {
+    padding: 32px 16px;
+    text-align: center;
+  }
+  #homepage h2 {
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  #homepage p {
+    font-size: 1.1rem;
+    margin-bottom: 24px;
+  }
+
+  .welcome-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: #fff;
+}
+
+.welcome-logo {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  margin: 0 auto 20px;
+}
+
+.intro-message {
+  background: var(--soft-bg);
+  border-radius: 14px;
+  padding: 30px;
+  margin: 0 auto 30px;
+  max-width: 800px;
+}
+
+.start-btn {
+  font-size: 1.2rem;
+  padding: 16px 32px;
+  margin-top: 20px;
+}
+
+.quote-box {
+  background: var(--accent-yellow);
+  border-radius: 14px;
+  padding: 24px;
+  margin: 20px auto;
+  max-width: 600px;
+  font-style: italic;
+}
+
+.quote-author {
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.main-header {
+  background-color: var(--accent-yellow);
+  padding: 20px 24px;
+  border-bottom: 4px solid rgba(0,0,0,0.08);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* title left, logo right */
+  gap: 20px;
+}
+
+.header-text {
+  text-align: left;
+}
+
+.header-text h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.header-text p {
+  margin: 4px 0 0;
+  font-size: 1rem;
+  color: rgba(0,0,0,0.8);
+}
+
+.logo {
+  width: 140px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.game-selection {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #fff;
+}
+
+.light {
+  background-color: #fff;
+  color: var(--text);
+  border: 2px solid var(--accent-yellow);
+}
+
+.light:hover {
+  background-color: var(--soft-bg);
+}
+
+.game-header {
+  background-color: var(--accent-yellow-2);
+  padding: 30px 20px;
+  text-align: center;
+  border-bottom: 4px solid rgba(0,0,0,0.1);
+}
+
+.game-header h2 {
+  margin: 0 0 10px;
+  font-size: 2rem;
+}
+
+.game-header p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.games-content {
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.game-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  margin: 30px auto;
+}
+</style>
+</head>
+<body>
+
+<!-- Welcome Section -->
+<section id="welcome" class="active">
+  <header class="main-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>💼 Accountrix</h1>
+        <p>Your fun accounting learning hub — learn accounting concepts through interactive games!</p>
+      </div>
+      <img src="assets/logo.png" alt="Accountrix Logo" class="logo"/>
+    </div>
+  </header>
+
+  <div class="welcome-content">
+    <div class="intro-message">
+      <p>Alright, accounting enthusiasts! Prepare for an immersive challenge where you'll tackle real-world accounting tasks! 💼💰</p>
+      <p>Today, we're stepping into the shoes of real accountants! Tracking cash, recording transactions, balancing books, and making smart financial decisions. 💼💰</p>
+      <p>This exercise emphasizes collaboration, strategic thinking, and healthy competition. So, gather your tools, focus your minds, and let's determine who can maintain the most accurate and effective financial records!</p>
+    </div>
+    <button class="btn start-btn light" onclick="showSection('homepage')">Start Your Journey</button>
+  </div>
+</section>
+
+<!-- Game Selection / Homepage -->
+<section id="homepage" class="hidden">
+  <header class="main-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>💼 Accountrix</h1>
+        <p>Your fun accounting learning hub — learn accounting concepts through interactive games!</p>
+      </div>
+      <!-- logo replaced to use logo.png -->
+      <img src="assets/logo.png" alt="Accountrix Logo" class="logo"/>
+    </div>
+  </header>
+
+    <div class="game-buttons">
+      <h2>Choose Your Challenge!</h2>
+      <button class="btn" onclick="showGame('game1')">🎲 Sort it or Lose it?</button>
+      <button class="btn" onclick="showGame('game2')">💳 Debit, Credit, Do It!</button>
+      <button class="btn" onclick="showGame('game3')">📘 Journalize It!</button>
+    </div>
+  </div>
+</section>
+
+<!-- Game 1: Sort it or Lose it -->
+<section id="game1" class="hidden">
+  <h2>Sort it or Lose it?</h2>
+  <p>Instruction: Identify if the given account title is ASSET, LIABILITY, or OWNER'S EQUITY.</p>
+  <p>Type "Own it" for Asset, "Owe it" for Liability, "Show it" for Owner's Equity.</p>
+  <p id="timer-1" class="timer">Time left: 10:00</p>
+  <div class="question-box">
+    <p>Question <span id="q1-number">1</span> of 17:</p>
+    <p id="q1-text"></p>
+    <input type="text" id="q1-answer" placeholder="Type your answer here..."/>
+    <div>
+      <button class="btn" onclick="checkAnswer1()">Submit</button>
+    </div>
+    <p id="feedback1"></p>
+  </div>
+  <div id="game-complete-1" class="hidden">
+    <h3>Choose your next challenge:</h3>
+    <button class="btn" onclick="showGame('game2')">Play Game 2: Debit, Credit, Do It!</button>
+    <button class="btn" onclick="showGame('game3')">Play Game 3: Journalize It!</button>
+  </div>
+</section>
+
+<!-- Game 2: Debit, Credit, Do It! -->
+<section id="game2" class="hidden">
+  <h2>Debit, Credit, Do It!</h2>
+  <p>Instruction: Guess the normal balance of each account title. Type Debit or Credit.</p>
+  <p id="timer-2" class="timer">Time left: 10:00</p>
+  <div class="question-box">
+    <p>Question <span id="q2-number">1</span> of 40:</p>
+    <p id="q2-text"></p>
+    <input type="text" id="q2-answer" placeholder="Type Debit or Credit"/>
+    <div>
+      <button class="btn" onclick="checkAnswer2()">Submit</button>
+    </div>
+    <p id="feedback2"></p>
+  </div>
+  <div id="game-complete-2" class="hidden">
+    <h3>Choose your next challenge:</h3>
+    <button class="btn" onclick="showGame('game1')">Play Game 1: Sort it or Lose it?</button>
+    <button class="btn" onclick="showGame('game3')">Play Game 3: Journalize It!</button>
+  </div>
+</section>
+
+<!-- Game 3: Journal Entries -->
+<section id="game3" class="hidden">
+  <h2>📘 Journalize It!</h2>
+  <p>Choose a business event:</p>
+  <button class="btn" onclick="startScenario('beauty')">💇 Beauty Balance Studio</button>
+  <button class="btn" onclick="startScenario('byte')">💻 ByteBalance Computers</button>
+  <button class="btn" onclick="startScenario('learn')">📚 Accountancy Learning Corner</button>
+
+  <div id="scenario-area" class="hidden question-box">
+    <h3 id="scenario-title"></h3>
+    <div id="intro-section">
+      <p id="intro-text"></p>
+      <button class="btn" onclick="startJournalizing()">Start Journalizing</button>
+    </div>
+    <div id="journal-section" class="hidden">
+      <p id="transaction-text"></p>
+      <input type="text" id="debit" placeholder="Debit Account"/>
+      <input type="text" id="credit" placeholder="Credit Account"/>
+      <input type="number" id="amount" placeholder="Amount (₱)"/>
+      <div>
+        <button class="btn" onclick="checkJournal()">Submit</button>
+      </div>
+      <p id="feedback3"></p>
+    </div>
+  </div>
+  <div id="game-complete-3" class="hidden">
+    <p>🎉 You've completed the game!</p>
+    <button class="btn" onclick="showGame('homepage')">Back to Homepage</button>
+  </div>
+</section>
+
+<!-- Outro -->
+<section id="outro" class="hidden">
+  <header class="main-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>💼 Accountrix</h1>
+        <p>Session Summary</p>
+      </div>
+      <!-- logo replaced to use logo.png -->
+      <img src="assets/logo.png" alt="Accountrix Logo" class="logo"/>
+    </div>
+  </header>
+
+  <div class="homepage-content">
+    <div class="quote-box" style="margin-top:24px;">
+      <p>
+        Incredible work, everyone! What a stimulating and thought-provoking session! 💡💸
+      </p>
+      <p>
+        You've all excelled in applying your accounting skills, expertly balancing debits and credits and tackling financial challenges. Whether your accounts aligned perfectly or not, the most important thing is that you learned, worked together, and enjoyed the process! 🙌
+      </p>
+      <p>
+        Accounting involves decision-making, teamwork, and accuracy, not just numbers. Today, you've all demonstrated that learning can be both enriching and fun!
+      </p>
+      <p>
+        Let's give a huge round of applause for everyone's outstanding effort! 👏👏👏
+      </p>
+    </div>
+    <div style="text-align:center; margin-top:20px;">
+      <button class="btn" onclick="showSection('homepage')">Back to Games</button>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ---------- HOME NAVIGATION ---------- */
+function showGame(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  
+  // Hide main header and show game header
+  document.querySelector('.main-header').style.display = 'none';
+  
+  if(id === 'game1') {
+    i1 = 0;
+    loadQ1();
+    timer1 = startTimer(1);
+  }
+  else if(id === 'game2') {
+    i2 = 0;
+    loadQ2();
+    timer2 = startTimer(2);
+  }
+}
+
+function showSection(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelector('.main-header').style.display = 'block';
+}
+
+/* ---------- GAME 1 DATA ---------- */
+const q1data = [
+  {q:"Cash", a:"own it"}, {q:"Accounts Payable", a:"owe it"},
+  {q:"Owner's Capital", a:"show it"}, {q:"Equipment", a:"own it"},
+  {q:"Unearned Revenue", a:"owe it"}, {q:"Accounts Receivable", a:"own it"},
+  {q:"Owner's Drawings", a:"show it"}, {q:"Notes Payable", a:"owe it"},
+  {q:"Supplies", a:"own it"}, {q:"Service Revenue", a:"show it"},
+  {q:"Buildings", a:"own it"}, {q:"Mortgage Payable", a:"owe it"},
+  {q:"Furniture", a:"own it"}, {q:"Salaries Payable", a:"owe it"},
+  {q:"Retained Earnings", a:"show it"}, {q:"Prepaid Rent", a:"own it"},
+  {q:"Utilities Payable", a:"owe it"}
+];
+let i1 = 0;
+function loadQ1(){
+  if(i1>=q1data.length){
+    document.getElementById('feedback1').innerHTML="🎉 Congratulations!";
+    return;
+  }
+  document.getElementById('q1-text').innerText=`${q1data[i1].q}`;
+  document.getElementById('q1-answer').value="";
+}
+function checkAnswer1(){
+  const ans=document.getElementById('q1-answer').value.trim().toLowerCase();
+  document.getElementById('q1-number').innerText = i1 + 1;
+  if(ans===q1data[i1].a){
+    document.getElementById('feedback1').innerHTML="😊 Correct!";
+    i1++;
+    if(i1 >= q1data.length){
+      clearInterval(timer1);
+      document.getElementById('feedback1').innerHTML = `
+      <div class="quote-box">
+        <p>"Every journal entry you solve brings you one step closer to understanding the language of business — one mistake, one correction, one win at a time."</p>
+        <p class="quote-author">- Sir Mark Quiel Sanchez, CPA, CTT, MRiTax, MBA</p>
+      </div>`;
+      document.getElementById('game-complete-1').classList.remove('hidden');
+    } else {
+      setTimeout(loadQ1,1000);
+    }
+  }else{
+    document.getElementById('feedback1').innerHTML="😢 Incorrect!";
+  }
+}
+loadQ1();
+
+/* ---------- GAME 2 DATA ---------- */
+const q2data = [
+  {q:"Notes Payable", a:"credit", hint:"This is a written promise to pay — obligations increase on the credit side."},
+  {q:"Supplies Expense", a:"debit", hint:"Expenses always reduce equity, and they increase on the debit side."},
+  {q:"Furniture", a:"debit", hint:"Assets like furniture increase on the debit side."},
+  {q:"Interest Payable", a:"credit", hint:"A payable means a liability — liabilities increase with a credit."},
+  {q:"Rent Expense", a:"debit", hint:"Expenses always increase on the debit side."},
+  {q:"Owner's Drawings", a:"debit", hint:"Withdrawals reduce the owner's capital — recorded as a debit."},
+  {q:"Rent Income", a:"credit", hint:"Income or revenue increases owner's equity — recorded as a credit."},
+  {q:"Building", a:"debit", hint:"Buildings are assets — assets increase on the debit side."},
+  {q:"Sales Revenue", a:"credit", hint:"Sales increase income, and revenues go to the credit side."},
+  {q:"Accrued Expenses Payable", a:"credit", hint:"It's an unpaid expense — still a liability that increases on the credit side."},
+  {q:"Prepaid Insurance", a:"debit", hint:"Prepaid means you paid ahead — that's an asset (debit)."},
+  {q:"Service Revenue", a:"credit", hint:"Revenues always increase on the credit side."},
+  {q:"Utilities Expense", a:"debit", hint:"Expenses are recorded on the debit side."},
+  {q:"Consulting Revenue", a:"credit", hint:"Income from services increases equity — that's a credit."},
+  {q:"Accounts Receivable", a:"debit", hint:"Customers owe you — assets increase with a debit."},
+  {q:"Owner's Capital", a:"credit", hint:"Owner's investment increases equity — recorded as a credit."},
+  {q:"Advertising Expense", a:"debit", hint:"Expenses reduce equity, so they increase with a debit."},
+  {q:"Land", a:"debit", hint:"Land is an asset — assets increase with a debit."},
+  {q:"Interest Expense", a:"debit", hint:"An expense always increases on the debit side."},
+  {q:"Notes Receivable", a:"debit", hint:"You're owed money under a written note — an asset (debit)."},
+  {q:"Commission Income", a:"credit", hint:"Income increases equity, so it goes to the credit side."},
+  {q:"Supplies", a:"debit", hint:"Supplies are assets — assets increase on the debit side."},
+  {q:"Rent Revenue", a:"credit", hint:"Revenue always increases on the credit side."},
+  {q:"Depreciation Expense", a:"debit", hint:"Expense account — increases on the debit side."},
+  {q:"Miscellaneous Expense", a:"debit", hint:"All expense accounts increase on the debit side."},
+  {q:"Unearned Revenue", a:"credit", hint:"Cash received in advance — a liability that increases on the credit side."},
+  {q:"Insurance Expense", a:"debit", hint:"Expenses increase with a debit."},
+  {q:"Accounts Payable", a:"credit", hint:"Liabilities like payables increase on the credit side."},
+  {q:"Salaries Payable", a:"credit", hint:"Unpaid wages are liabilities — increase with a credit."},
+  {q:"Prepaid Rent", a:"debit", hint:"Paying rent early gives a future benefit — an asset (debit)."},
+  {q:"Interest Revenue", a:"credit", hint:"Revenue increases owner's equity — recorded as a credit."},
+  {q:"Equipment", a:"debit", hint:"Equipment is an asset — increases with a debit."},
+  {q:"Cash", a:"debit", hint:"Cash is an asset — all assets increase with a debit."},
+  {q:"Repairs Expense", a:"debit", hint:"Expenses increase with a debit."},
+  {q:"Service Fee Revenue", a:"credit", hint:"Revenue accounts increase on the credit side."},
+  {q:"Salaries Expense", a:"debit", hint:"Expenses always increase with a debit."},
+  {q:"Interest Income", a:"credit", hint:"Income increases owner's equity — recorded as a credit."},
+  {q:"Maintenance Expense", a:"debit", hint:"Expenses increase with a debit."},
+  {q:"Common Stock", a:"credit", hint:"Stock issuance increases equity — recorded as a credit."},
+  {q:"Dividends", a:"debit", hint:"Distributions to shareholders decrease equity — recorded as a debit."}
+];
+let i2=0;
+function loadQ2(){
+  if(i2>=q2data.length){
+    document.getElementById('feedback2').innerHTML="🎊 Thank you for trying your best, You did it!";
+    return;
+  }
+  document.getElementById('q2-text').innerText=`${q2data[i2].q}`;
+  document.getElementById('q2-answer').value="";
+}
+function checkAnswer2(){
+  const ans=document.getElementById('q2-answer').value.trim().toLowerCase();
+  document.getElementById('q2-number').innerText = i2 + 1;
+  if(ans===q2data[i2].a){
+    document.getElementById('feedback2').innerHTML="🎉 Correct!";
+    i2++;
+    if(i2 >= q2data.length){
+      clearInterval(timer2);
+      document.getElementById('feedback2').innerHTML = `
+      <div class="quote-box">
+        <p>"Behind every balanced sheet is someone who refused to give up when the numbers didn't match. Keep going — every effort counts toward progress."</p>
+        <p class="quote-author">- Sir Mark Quiel Sanchez, CPA, CTT, MRiTax, MBA</p>
+      </div>`;
+      document.getElementById('game-complete-2').classList.remove('hidden');
+    } else {
+      setTimeout(loadQ2,1000);
+    }
+  }else{
+    document.getElementById('feedback2').innerHTML="😔 Try again next time.";
+  }
+}
+loadQ2();
+
+/* ---------- GAME 3 DATA ---------- */
+const scenarios = {
+  beauty: {
+    title:"Beauty Balance Studio",
+    intro:"Beauty Balance Studio is a salon that aims to boost people's confidence by helping them look and feel good. We provide affordable services such as haircuts, hairstyling, nail treatments, and simple skincare that are suitable for everyone. Our salon offers a cozy and friendly environment where customers can relax and enjoy self-care without overspending. Beauty Balance Studio believes that taking care of your appearance is part of maintaining a balanced lifestyle, and we hope to become a favorite self-care spot for students and the local community.",
+    
+    data:[
+      {t:"Owner invested ₱200,000 cash to start.", d:"cash", c:"owners capital", a:200000},
+      {t:"Paid ₱25,000 for 1-month shop rental.", d:"rent expense", c:"cash", a:25000},
+      {t:"Purchased salon chairs and mirrors ₱65,000 cash.", d:"studio equipment", c:"cash", a:65000},
+      {t:"Bought hair products on account ₱12,000.", d:"supplies", c:"accounts payable", a:12000},
+      {t:"Provided salon services ₱18,500 cash.", d:"cash", c:"service revenue", a:18500},
+      {t:"Provided ₱6,200 services on account.", d:"accounts receivable", c:"service revenue", a:6200},
+      {t:"Paid ₱4,000 utilities.", d:"utilities expense", c:"cash", a:4000},
+      {t:"Paid ₱5,000 to suppliers for hair products.", d:"cash", c:"supplies", a:5000}, //D:cash C:Supplies 
+      {t:"Owner withdrew ₱3,500 for personal use.", d:"owners drawing", c:"cash", a:3500},
+      {t:"Received ₱4,500 from customers on account.", d:"cash", c:"accounts receivable", a:4500}
+    ]
+  },
+byte: {
+  title:"ByteBalance Computers",
+  intro:"Bytebalance Computers is a small business specializing in computer sales, repair, and network installation services. Aside from offering technical services, we also ensure that all business activities are properly recorded and monitored.", 
+  
+  data:[
+      {t:"Owner invested ₱200,000 cash.", d:"cash", c:"owners capital", a:200000},
+      {t:"Purchased ₱50,000 computer parts on account.", d:"supplies", c:"accounts payable", a:50000},
+      {t:"Paid ₱15,000 shop rent.", d:"rent expense", c:"cash", a:15000},
+      {t:"Performed repair ₱12,000 cash.", d:"cash", c:"service revenue", a:12000},
+      {t:"Provided ₱8,000 network install on account.", d:"accounts receivable", c:"service revenue", a:8000}
+    ]
+  },
+  learn: {
+    title:"Accountancy Learning Corner",
+    intro:"The center focuses on teaching students how to analyze transactions, prepare financial statements, and understand the fundamentals of accounting. Like any business, it also needs to keep track of its own finances from tutorial fees received to expenses paidd.",
+    
+    data:[
+      {t:"Invested ₱150,000 cash.", d:"cash", c:"owners capital", a:150000},
+      {t:"Rented space ₱12,000 cash.", d:"rent expense", c:"cash", a:12000},
+      {t:"Purchased chairs ₱25,000 cash.", d:"office equipment", c:"cash", a:25000},
+      {t:"Bought supplies ₱5,000 on account.", d:"supplies", c:"accounts payable", a:5000},
+      {t:"Received ₱10,000 tutorial fees.", d:"cash", c:"service revenue", a:10000}
+    ]
+  }
+};
+let currentScenario=null, idx3=0;
+
+function startScenario(key){
+  currentScenario = scenarios[key];
+  idx3 = 0;
+  document.getElementById('scenario-area').classList.remove('hidden');
+  document.getElementById('scenario-title').innerText = currentScenario.title;
+  document.getElementById('intro-text').innerText = currentScenario.intro;
+  document.getElementById('intro-section').classList.remove('hidden');
+  document.getElementById('journal-section').classList.add('hidden');
+}
+
+function startJournalizing() {
+  document.getElementById('intro-section').classList.add('hidden');
+  document.getElementById('journal-section').classList.remove('hidden');
+  loadJournal();
+}
+
+function loadJournal(){
+  if(idx3>=currentScenario.data.length){
+    document.getElementById('feedback3').innerHTML = `
+      <div class="quote-box">
+        <p>"${currentScenario.completionMessage}"</p>
+        <p class="quote-author">- Sir Mark Quiel Sanchez, CPA, CTT, MRiTax, MBA</p>
+      </div>`;
+    setTimeout(() => {
+      document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+      document.getElementById('outro').classList.remove('hidden');
+    }, 3000);
+    return;
+  }
+  const tx=currentScenario.data[idx3];
+  document.getElementById('transaction-text').innerText=tx.t;
+  document.getElementById('debit').value="";
+  document.getElementById('credit').value="";
+  document.getElementById('amount').value="";
+  document.getElementById('feedback3').innerText="";
+}
+function checkJournal(){
+  const d=document.getElementById('debit').value.trim().toLowerCase();
+  const c=document.getElementById('credit').value.trim().toLowerCase();
+  const a=parseInt(document.getElementById('amount').value);
+  const tx=currentScenario.data[idx3];
+  if(d===tx.d && c===tx.c && a===tx.a){
+    document.getElementById('feedback3').innerHTML="✅ Correct!";
+    idx3++; setTimeout(loadJournal,1000);
+  }else{
+    document.getElementById('feedback3').innerHTML="❌ Incorrect!";
+  }
+}
+
+/* ---------- TIMER FUNCTIONALITY ---------- */
+let timer1, timer2;
+const GAME_TIME = 600; // 10 minutes in seconds
+
+function startTimer(gameId) {
+  let timeLeft = GAME_TIME;
+  const timerId = setInterval(() => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById(`timer-${gameId}`).innerText = 
+      `Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    
+    if (timeLeft <= 0) {
+      clearInterval(timerId);
+      endGame(gameId);
+    }
+    timeLeft--;
+  }, 1000);
+  return timerId;
+}
+
+function endGame(gameId) {
+  const feedback = document.getElementById(`feedback${gameId}`);
+  feedback.innerHTML = "⏰ Time's up! Game Over";
+  document.getElementById(`game-complete-${gameId}`).classList.remove('hidden');
+}
+</script>
+</body>
+</html>
